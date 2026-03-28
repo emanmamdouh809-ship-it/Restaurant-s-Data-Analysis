@@ -510,25 +510,6 @@ elif page == "Analysis":
 
         col2= st.columns(1)[0]
         with col2:
-                fig10 = px.scatter(df, x='price',y='quantity', size='order_total', color='category',title='Price vs Quantity (Size = order total)', hover_data=['item'])
-                fig10.update_traces(textfont=dict(color='black'))
-                fig10.update_layout(
-                    paper_bgcolor='rgba(255,255,255,0.8)',   
-                    plot_bgcolor='rgba(245,245,245,1)',      
-                    legend=dict(font=dict(color='black', size=12),title_font=dict(color='black', size=12)),
-                    xaxis=dict(showgrid=True, gridcolor='rgba(0,0,0,0.05)',
-                    title_font=dict(color='black', size=12),
-                    tickfont=dict(color='black', size=11) ),
-
-                    yaxis=dict(showgrid=True, gridcolor='rgba(0,0,0,0.05)',
-                    title_font=dict(color='black', size=12),      
-                    tickfont=dict(color='black', size=11) ),
-                    margin=dict(l=10, r=10, t=40, b=10),
-                    
-                    title_font=dict(size=16, color='#333', family="Arial"),)  
-                st.plotly_chart(fig10, use_container_width=True)
-        col3= st.columns(1)[0]
-        with col3:
      
                 Filtered_df['order_date'] = pd.to_datetime(Filtered_df['order_date'])
                 Filtered_df['day'] = Filtered_df['order_date'].dt.day_name()
@@ -553,8 +534,8 @@ elif page == "Analysis":
                     title_font=dict(size=16, color='#333', family="Arial")   )
                 st.plotly_chart(fig11, use_container_width=True)
 
-        col4= st.columns(1)[0]
-        with col4:
+        col3= st.columns(1)[0]
+        with col3:
                 
                 top10_customers = (
                     Filtered_df.groupby('customer_id')
@@ -630,7 +611,9 @@ else :
                         <div class="text">
                         1. Top items by quantity sold: <b>Pasta Alfredo</b> (Main Dish) and <b>Side Salad</b> (Side Dishes).<br><br>
                         2. Top items by revenue: <b>Grilled Chicken</b> and <b>Pasta Alfredo</b> (Main Dishes).<br><br>
-                        3. Top category by both quantity sold and revenue: <b>Main Dishes</b>.
+                        3. Top category by quantity sold, revenue and Average Order Value: <b>Main Dishes</b>.<br><br>
+                        4. April is the top revenue month, indicating higher demand during this period.<br><br>
+                        5. Growth rate showing unstable performance.
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -643,6 +626,8 @@ else :
                         1. High-order, low-revenue customers → target with special offers to increase average order value.<br><br>
                         2. High-revenue, low-frequency customers → use personalized campaigns to increase order frequency.<br><br>
                         3. Focus on promoting <b>Main Dishes</b> as they drive the highest revenue and demandand, and introduce new items in the Main Dishes category.<br><br>
+                        4. Boost marketing campaigns before and during April to maximize sales, Ensure sufficient inventory and resources to meet the increased demand.<br><br>
+                        5. Try different products, reach more customers and prepare strategies to manage periods of low growth. 
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
