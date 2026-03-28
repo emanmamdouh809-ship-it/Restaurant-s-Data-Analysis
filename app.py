@@ -596,17 +596,54 @@ elif page == "Analysis":
                 st.plotly_chart(fig, use_container_width=True)                    
 else :
     st.markdown("<h1 style='color:black; text-decoration: underline;'>Insights and Recommendations</h1>", unsafe_allow_html=True)
+    
     st.markdown("""
-                ### Insights:
-                1:-Top items by quantity sold pasta alfredo (main dish) and Side Salad (Side dishes category) 
-                2:-Top items Grilled Chicken and Pasta Alfredo by Revenue (Main Dishes category)
-                3:-Top Category by quantity sold and Revenue Main Dishes 
-                
-                ### Buisness recomendations:
-                1:-Top 10 customer
-                2:-
-                3:-
-                
-                
-                """)
-          
+                <style>
+                .box {
+                    background-color: rgba(245,245,245,0.9);
+                    padding: 20px;
+                    border-radius: 15px;
+                    margin-bottom: 15px;
+                    border: 1px solid #ddd;
+                }
+                .title {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #333;
+                    margin-bottom: 10px;
+                }
+                .text {
+                    font-size: 15px;
+                    color: #444;
+                    line-height: 1.8;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+                    st.markdown("""
+                    <div class="box">
+                        <div class="title"> Insights</div>
+                        <div class="text">
+                        1. Top items by quantity sold: <b>Pasta Alfredo</b> (Main Dish) and <b>Side Salad</b> (Side Dishes).<br><br>
+                        2. Top items by revenue: <b>Grilled Chicken</b> and <b>Pasta Alfredo</b> (Main Dishes).<br><br>
+                        3. Top category by both quantity sold and revenue: <b>Main Dishes</b>.
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+    with col2:
+                    st.markdown("""
+                    <div class="box">
+                        <div class="title">💡Business Recommendations</div>
+                        <div class="text">
+                        1. High-order, low-revenue customers → target with special offers to increase average order value.<br><br>
+                        2. High-revenue, low-frequency customers → use personalized campaigns to increase order frequency.<br><br>
+                        3. Focus on promoting <b>Main Dishes</b> as they drive the highest revenue and demandand, and introduce new items in the Main Dishes category.<br><br>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+            
