@@ -321,7 +321,7 @@ elif page == "Analysis":
         col3= st.columns(1)[0]
         with col3:
                     revenue_by_item = Filtered_df.groupby('item')['order_total'].sum().sort_values(ascending=False).reset_index()
-                    fig2 = px.bar(revenue_by_item, x='order_total', y='item', title='items by Revenue',orientation='h',text='order_total')
+                    fig2 = px.bar(revenue_by_item, x='order_total', y='item', title='Items by Revenue',orientation='h',text='order_total')
                     fig2.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
                     fig2.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
@@ -393,7 +393,7 @@ elif page == "Analysis":
 
         with col3:
                     item_by_quantity = Filtered_df.groupby('item')['quantity'].sum().reset_index().sort_values(by='quantity', ascending=False)
-                    fig7 = px.bar(item_by_quantity, x='quantity', y='item', title='items by Quantity Sold',text='quantity')
+                    fig7 = px.bar(item_by_quantity, x='quantity', y='item', title='Items by Quantity Sold',text='quantity')
                     fig7.update_traces(textfont=dict(color='black'))
                     fig7.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
@@ -413,9 +413,9 @@ elif page == "Analysis":
                     st.plotly_chart(fig7, use_container_width=True)
         col4 = st.columns(1)[0]
         with col4:
-                    top_10_customers_Num_orders = Filtered_df.groupby('customer_id')['order_total'].count().sort_values(ascending=False).head(10).reset_index()
-                    fig3 = px.bar(top_10_customers_Num_orders, x='order_total', y='customer_id', title='Top 10 Customers by Number of Orders',labels={'order_total':'Number of Orders'},orientation='h',text='order_total')
-                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
+                    top_10_customers_Num_orders = Filtered_df.groupby('customer_id')['order_id'].nunique().sort_values(ascending=False).head(10).reset_index()
+                    fig3 = px.bar(top_10_customers_Num_orders, x='order_id', y='customer_id', title='Top 10 Customers by Number of Orders',labels={'order_id':'Number of Orders'},orientation='h',text='order_id')
+                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f}')
                     fig3.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
