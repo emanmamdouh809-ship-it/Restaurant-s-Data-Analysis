@@ -135,26 +135,29 @@ if page == "Main Dashboard":
         <div class="kpi-value">${Filtered_df['order_total'].sum():,.2f}</div>
     </div>
     """, unsafe_allow_html=True)
-    col2.markdown(f"""
-    <div class="kpi-card">
-        <div class="kpi-title">🧾 Total Orders</div>
-        <div class="kpi-value">{Filtered_df['order_id'].nunique():,.0f}</div>
-    </div>
-    """, unsafe_allow_html=True)
-    col3.markdown(f"""
-    <div class="kpi-card">
-        <div class="kpi-title">📦 Total Quantity Sold</div>
-        <div class="kpi-value">{Filtered_df['quantity'].sum():,.0f}</div>
-    </div>
-    """, unsafe_allow_html=True)
     
     AOV = Filtered_df['order_total'].sum() / Filtered_df['order_id'].nunique()
-    col4.markdown(f"""
+    col2.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-title">💵 Average Order Value</div>
         <div class="kpi-value">${AOV:,.2f}</div>
     </div>
     """, unsafe_allow_html=True)
+
+    col3.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">🧾 Total Orders</div>
+        <div class="kpi-value">{Filtered_df['order_id'].nunique():,.0f}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col4.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">📦 Total Quantity Sold</div>
+        <div class="kpi-value">{Filtered_df['quantity'].sum():,.0f}</div>
+    </div>
+    """, unsafe_allow_html=True)
+  
     col5.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-title">👥 Number of Customers</div>
