@@ -22,17 +22,9 @@ st.markdown("""
     font-family: 'Segoe UI', sans-serif;
 }
 
-.kpi-title {
-    font-size: 16px;
-    color: #555;
-    font-weight: bold;
-}
+.kpi-title {font-size: 16px; color: #555; font-weight: bold;}
 
-.kpi-value {
-    font-size: 16px;
-    font-weight: bold;
-    color: black;
-}
+.kpi-value { font-size: 16px; font-weight: bold; color: black;}
 
 </style>
 """, unsafe_allow_html=True)
@@ -54,21 +46,15 @@ st.markdown("""
     font-weight: bold;
     color: #555;
     border: 1px solid transparent;
-    transition: 0.3s;
+    transition: 0.3s;}
 
-}
+.stTabs [data-baseweb="tab"]:hover {background-color: rgba(180, 180, 180, 0.3);}
 
-.stTabs [data-baseweb="tab"]:hover {
-    background-color: rgba(180, 180, 180, 0.3);
-}
-
-.stTabs [aria-selected="true"] {
-    background-color: white;
+.stTabs [aria-selected="true"] { background-color: white;
     color: black;
     font-weight: bold;
     border: 1px solid rgba(150,150,150,0.4);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-}
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);}
 
 </style>
 """, unsafe_allow_html=True)
@@ -77,14 +63,10 @@ st.markdown("""
 st.markdown(
     """
     <style>
-    .stApp {
-        background-color: #FEEBE7;  
-    }
-    
+    .stApp { background-color: #FEEBE7; }
     </style>
     """,
-    unsafe_allow_html=True   
-)
+    unsafe_allow_html=True   )
 
 #Sidebar
 with st.sidebar:
@@ -145,36 +127,50 @@ with st.sidebar:
 if page == "Main Dashboard":
 
     st.markdown("<h1 style='color:black; text-decoration: underline;'>Main Dashboard</h1>", unsafe_allow_html=True)
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     col1.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-title">Total Revenue</div>
+        <div class="kpi-title">💰 Total Revenue</div>
         <div class="kpi-value">${Filtered_df['order_total'].sum():,.2f}</div>
     </div>
     """, unsafe_allow_html=True)
     col2.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-title">Total Orders</div>
-        <div class="kpi-value">{Filtered_df.shape[0]:,.0f}</div>
+        <div class="kpi-title">🧾 Total Orders</div>
+        <div class="kpi-value">{Filtered_df['order_id'].nunique():,.0f}</div>
     </div>
     """, unsafe_allow_html=True)
     col3.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-title">Total Quantity Sold</div>
+        <div class="kpi-title">📦 Total Quantity Sold</div>
         <div class="kpi-value">{Filtered_df['quantity'].sum():,.0f}</div>
     </div>
     """, unsafe_allow_html=True)
+    
+    AOV = Filtered_df['order_total'].sum() / Filtered_df['order_id'].nunique()
     col4.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-title">Average Order Value</div>
-        <div class="kpi-value">${Filtered_df['order_total'].mean():,.2f}</div>
+        <div class="kpi-title">💵 Average Order Value</div>
+        <div class="kpi-value">${AOV:,.2f}</div>
     </div>
     """, unsafe_allow_html=True)
     col5.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-title">Number of Customers</div>
+        <div class="kpi-title">👥 Number of Customers</div>
         <div class="kpi-value">{Filtered_df['customer_id'].nunique()}</div> 
+    </div>
+    """, unsafe_allow_html=True)
+
+    customer_orders = Filtered_df.groupby('customer_id')['order_id'].nunique()
+    repeat_customers = customer_orders[customer_orders > 1].count()
+    total_customers = Filtered_df['customer_id'].nunique()
+    repeat_rate = (repeat_customers / total_customers) * 100
+
+    col6.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">🔁 Repeat Customer Rate</div>
+        <div class="kpi-value">{repeat_rate:.2f}%</div> 
     </div>
     """, unsafe_allow_html=True)
 
@@ -260,7 +256,7 @@ elif page == "Analysis":
                     tickfont=dict(color='black', size=11) ),
                     margin=dict(l=10, r=10, t=40, b=10),
                     
-                    title_font=dict(size=16, color='#333', family="Arial"),  )
+                    title_font=dict(size=16, color='#333', family="Arial"), )
 
                 st.plotly_chart(fig1, use_container_width=True)
                
@@ -283,7 +279,7 @@ elif page == "Analysis":
         with col1:
                     revenue_by_category = Filtered_df.groupby('category')['order_total'].sum().reset_index().sort_values(by='order_total', ascending=False)
                     fig1 = px.bar(revenue_by_category, x='category', y='order_total', title='Revenue by Category',text='order_total',labels={'order_total':'Revenue'})
-                    fig1.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} LE')
+                    fig1.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
                     fig1.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
@@ -303,7 +299,7 @@ elif page == "Analysis":
         with col2:
                     top_10_customers_by_rev = Filtered_df.groupby('customer_id')['order_total'].sum().sort_values(ascending=False).head(10).reset_index()
                     fig3 = px.bar(top_10_customers_by_rev, x='order_total', y='customer_id', title='Top 10 Customers by Revenue',orientation='h',text='order_total')
-                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} LE')
+                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
                     fig3.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
@@ -323,7 +319,7 @@ elif page == "Analysis":
         with col3:
                     revenue_by_item = Filtered_df.groupby('item')['order_total'].sum().sort_values(ascending=False).reset_index()
                     fig2 = px.bar(revenue_by_item, x='order_total', y='item', title='items by Revenue',orientation='h',text='order_total')
-                    fig2.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} LE')
+                    fig2.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
                     fig2.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
@@ -372,7 +368,7 @@ elif page == "Analysis":
         with col2:
                     AVG_order_by_category = Filtered_df.groupby('category')['order_total'].mean().reset_index().sort_values(by='order_total', ascending=False)
                     fig6 = px.bar(AVG_order_by_category, x='category', y='order_total', title='Average Order Value by Category',text='order_total',labels={'order_total':'Average Order Value'})
-                    fig6.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.2f} LE')
+                    fig6.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.2f} $')
                     fig6.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
@@ -416,7 +412,7 @@ elif page == "Analysis":
         with col4:
                     top_10_customers_Num_orders = Filtered_df.groupby('customer_id')['order_total'].count().sort_values(ascending=False).head(10).reset_index()
                     fig3 = px.bar(top_10_customers_Num_orders, x='order_total', y='customer_id', title='Top 10 Customers by Number of Orders',labels={'order_total':'Number of Orders'},orientation='h',text='order_total')
-                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} LE')
+                    fig3.update_traces(textfont=dict(color='black'),texttemplate='%{text:,.0f} $')
                     fig3.update_layout(
                         paper_bgcolor='rgba(255,255,255,0.8)',   
                         plot_bgcolor='rgba(245,245,245,1)',      
@@ -537,42 +533,24 @@ elif page == "Analysis":
         col3= st.columns(1)[0]
         with col3:
                 
-                top10_customers = (
-                    Filtered_df.groupby('customer_id')
-                    .agg(total_revenue=('order_total','sum'), order_count=('customer_id','count'))
-                    .sort_values('total_revenue', ascending=False)
-                    .head(10)
-                    .reset_index()   )
+                top10_customers = (Filtered_df.groupby('customer_id').agg(total_revenue=('order_total','sum'), order_count=('customer_id','count'))
+                    .sort_values('total_revenue', ascending=False).head(10).reset_index())
 
-                df_melted = top10_customers.melt(
-                    id_vars='customer_id',
-                    value_vars=['total_revenue','order_count'],
-                    var_name='Metric',
-                    value_name='Value' )
+                df_melted = top10_customers.melt(id_vars='customer_id', value_vars=['total_revenue','order_count'],var_name='Metric',value_name='Value' )
 
-                fig = px.bar(
-                    df_melted,
-                    x='customer_id',
-                    y='Value',
-                    color='Metric',          
-                    barmode='group',          
-                    text='Value',
-                    labels={'customer_id':'Customer', 'Value':'Value', 'Metric':'Metric'},
-                    title='Top 10 Customers: Revenue vs Number of Orders' )
+                fig = px.bar(df_melted,x='customer_id',y='Value',color='Metric',barmode='group',text='Value',title='Top 10 Customers by Revenue vs Number of Orders',
+                    labels={'customer_id':'Customer', 'Value':'Value'},)
                
                 fig.update_traces(texttemplate='%{text:.2f}',textfont=dict(color='black'), textposition='outside')
-                fig.update_layout(
-                    paper_bgcolor='rgba(255,255,255,0.8)',   
-                    plot_bgcolor='rgba(245,245,245,1)', 
+                fig.update_layout(paper_bgcolor='rgba(255,255,255,0.8)',plot_bgcolor='rgba(245,245,245,1)',title_font=dict(color='black', size=16),
                     legend=dict(font=dict(color='black', size=12),title_font=dict(color='black', size=12)),
-                    xaxis=dict(                        title='Customer',
+
+                    xaxis=dict( title='Customer',
                     tickangle=-45,
                     title_font=dict(color='black', size=12),
                     tickfont=dict(color='black', size=11) ),
-                    yaxis=dict(
-                    title='Value',
-                    title_font=dict(color='black', size=12),
-                    tickfont=dict(color='black', size=11) ))
+
+                    yaxis=dict(title='Value',title_font=dict(color='black', size=12),tickfont=dict(color='black', size=11) ))
 
                 st.plotly_chart(fig, use_container_width=True)                    
 else :
@@ -607,13 +585,15 @@ else :
     with col1:
                     st.markdown("""
                     <div class="box">
-                        <div class="title"> Insights</div>
+                        <div class="title">📊 Insights</div>
                         <div class="text">
-                        1. Top items by quantity sold: <b>Pasta Alfredo</b> (Main Dish) and <b>Side Salad</b> (Side Dishes).<br><br>
-                        2. Top items by revenue: <b>Grilled Chicken</b> and <b>Pasta Alfredo</b> (Main Dishes).<br><br>
-                        3. Top category by quantity sold, revenue and Average Order Value: <b>Main Dishes</b>.<br><br>
-                        4. April is the top revenue month, indicating higher demand during this period.<br><br>
-                        5. Growth rate showing unstable performance.
+                        1. The repeat customer rate is 100%, indicating strong customer loyalty and satisfaction.<br><br>
+                        2. Top items by quantity sold: <b>Pasta Alfredo</b> (Main Dish) and <b>Side Salad</b> (Side Dishes).<br><br>
+                        3. Top items by revenue: <b>Grilled Chicken</b> and <b>Pasta Alfredo</b> (Main Dishes).<br><br>
+                        4. Top category by quantity sold, revenue and Average Order Value: <b>Main Dishes</b>.<br><br>
+                        5. April is the top revenue month, indicating higher demand during this period.<br><br>
+                        6. Growth rate showing unstable performance.<br><br>
+                        7. Order patterns vary by both day of the week and category, with noticeable peaks such as high demand for Side Dishes on Sunday and Starters on Saturday.
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -623,11 +603,15 @@ else :
                     <div class="box">
                         <div class="title">💡Business Recommendations</div>
                         <div class="text">
-                        1. High-order, low-revenue customers → target with special offers to increase average order value.<br><br>
-                        2. High-revenue, low-frequency customers → use personalized campaigns to increase order frequency.<br><br>
-                        3. Focus on promoting <b>Main Dishes</b> as they drive the highest revenue and demandand, and introduce new items in the Main Dishes category.<br><br>
-                        4. Boost marketing campaigns before and during April to maximize sales, Ensure sufficient inventory and resources to meet the increased demand.<br><br>
-                        5. Try different products, reach more customers and prepare strategies to manage periods of low growth. 
+                        1. Increase <b>average order value</b> through bundles.<br><br> 
+                        2 Target top repeat customers with personalized offers and promotions, and plan marketing campaigns to attract new customers or explore new segments.<br><br>
+                        3. <b>High-order, low-revenue customers</b> → target with special offers to increase average order value.<br><br>
+                        4. <b>High-revenue, low-frequency customers</b> → use personalized campaigns to increase order frequency.<br><br>
+                        5. Leverage high customer loyalty with loyalty programs or special offers.<br><br>
+                        6. Focus on promoting <b>Main Dishes</b> as they drive the highest revenue and demandand, and introduce new items in the Main Dishes category.<br><br>
+                        7. Boost marketing campaigns before and during April to maximize sales, Ensure sufficient inventory and resources to meet the increased demand.<br><br>
+                        8. Try different products, reach more customers and prepare strategies to manage periods of low growth.<br><br>
+                        9. Adjust promotions, inventory, and staffing based on daily demand patterns.
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
