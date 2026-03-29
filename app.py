@@ -582,9 +582,32 @@ else :
                 </style>
                 """, unsafe_allow_html=True)
 
+    col0 = st.columns(1)[0]
+    with col0:
+    
+                    
+                    st.markdown("""
+                    <div class="box">
+                        <div class="title">💡 Main Project Question:</div>
+                        <div class="text">
+                            What are the key factors driving revenue and customer behavior in the restaurant, and how can the restaurant optimize sales and customer retention?
+                        </div>
+                    </div>
+                    
+                    <div class="box">
+                        <div class="title">📝 Sub-Questions:</div>
+                        <div class="text">
+                            👤 Who are the top customers?<br><br>
+                            🛒 Which product categories generate the most revenue and which need improvement?<br><br>
+                            💰 What is the average order value?<br><br>
+                            📈 Are there patterns in sales over time (daily, weekly, or monthly trends)?<br><br>
+                            💳 How does the payment method affect sales and customer behavior?<br><br>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
 
     col1, col2 = st.columns(2)
-
     with col1:
                     st.markdown("""
                     <div class="box">
